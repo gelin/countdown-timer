@@ -27,7 +27,10 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 
     void initWheel(int id, int min, int max) {
         AbstractWheel wheel = (AbstractWheel)findViewById(id);
-        wheel.setViewAdapter(new NumericWheelAdapter(this, min, max));
+        NumericWheelAdapter adapter = new NumericWheelAdapter(this, min, max);
+        adapter.setItemResource(R.layout.wheel_text_centered);
+        adapter.setItemTextResource(R.id.text);
+        wheel.setViewAdapter(adapter);
         wheel.setCyclic(true);
     }
 
