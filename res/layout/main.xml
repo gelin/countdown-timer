@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@android:id/content"
-              android:orientation="vertical"
+              android:orientation="horizontal"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:keepScreenOn="true"
         >
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Hello World, MainActivity"
-            />
+
+    <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/ten_mins"
+                                               android:layout_height="wrap_content"
+                                               android:layout_width="50dp"/>
+    <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/mins"
+                                               android:layout_height="wrap_content"
+                                               android:layout_width="50dp"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="fill_parent"
+              android:text=":"/>
+    <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/ten_secs"
+                                               android:layout_height="wrap_content"
+                                               android:layout_width="50dp"/>
+    <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/secs"
+                                               android:layout_height="wrap_content"
+                                               android:layout_width="50dp"/>
+
 </LinearLayout>
 
