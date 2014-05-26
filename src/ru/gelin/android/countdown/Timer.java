@@ -55,7 +55,7 @@ public class Timer {
 
     private void updateZeroTime() {
         long now = System.currentTimeMillis();
-        this.zeroTime = now + this.offset * 1000;
+        this.zeroTime = now - this.offset * 1000;
     }
 
     /**
