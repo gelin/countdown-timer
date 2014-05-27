@@ -9,7 +9,7 @@ import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelChangedListener;
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 
-public class MainActivity extends Activity implements View.OnSystemUiVisibilityChangeListener, View.OnLongClickListener, OnWheelChangedListener {
+public class MainActivity extends Activity implements View.OnSystemUiVisibilityChangeListener, OnWheelChangedListener {
 
     static final int MAX_OFFSET = 99 * 60 + 59;
 
@@ -33,7 +33,6 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         View content = findViewById(android.R.id.content);
         content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         content.setOnSystemUiVisibilityChangeListener(this);
-        content.setOnLongClickListener(this);
 
         //TODO remove test
         this.timer.set(-30);
@@ -47,8 +46,6 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         adapter.setItemTextResource(R.id.text);
         wheel.setViewAdapter(adapter);
         wheel.setCyclic(true);
-        wheel.setLongClickable(true);
-        wheel.setOnLongClickListener(this);
         wheel.addChangingListener(this);
     }
 
@@ -64,17 +61,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
     }
 
-    @Override
-    public boolean onLongClick(View view) {
-        if (this.timer.isRunning()) {
-            stop();
-        } else {
-            start();
-        }
-        return true;
-    }
-
-    void start() {
+    public void start(View btn) {
         enableWheel(R.id.ten_mins, false);
         enableWheel(R.id.mins, false);
         enableWheel(R.id.ten_secs, false);
@@ -82,15 +69,24 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         this.timer.start();
         this.updater = new UpdateTask();
         this.updater.execute();
+        findViewById(R.id.start_btn).setVisibility(View.GONE);
+        findViewById(R.id.stop_btn).setVisibility(View.VISIBLE);
     }
 
-    void stop() {
+    public void stop(View btn) {
         this.timer.stop();
         this.updater.stop();
         enableWheel(R.id.ten_mins, true);
         enableWheel(R.id.mins, true);
         enableWheel(R.id.ten_secs, true);
         enableWheel(R.id.secs, true);
+        findViewById(R.id.stop_btn).setVisibility(View.GONE);
+        findViewById(R.id.start_btn).setVisibility(View.VISIBLE);
+    }
+
+    public void reset(View btn) {
+        this.timer.reset();
+        updateWheels();
     }
 
     void enableWheel(int id, boolean enabled) {
