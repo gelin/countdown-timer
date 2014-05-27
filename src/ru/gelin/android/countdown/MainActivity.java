@@ -6,9 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import antistatic.spinnerwheel.AbstractWheel;
+import antistatic.spinnerwheel.OnWheelChangedListener;
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 
-public class MainActivity extends Activity implements View.OnSystemUiVisibilityChangeListener, View.OnLongClickListener {
+public class MainActivity extends Activity implements View.OnSystemUiVisibilityChangeListener, View.OnLongClickListener, OnWheelChangedListener {
 
     static final int MAX_OFFSET = 99 * 60 + 59;
 
@@ -48,6 +49,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         wheel.setCyclic(true);
         wheel.setLongClickable(true);
         wheel.setOnLongClickListener(this);
+        wheel.addChangingListener(this);
     }
 
     @Override
@@ -145,6 +147,22 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
             updateWheels();
         }
 
+    }
+
+    @Override
+    public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+        if (this.timer.isRunning()) {
+            return;
+        }
+        int mins = getWheelValue(R.id.ten_mins) * 10 + getWheelValue(R.id.mins);
+        int secs = getWheelValue(R.id.ten_secs) * 10 + getWheelValue(R.id.secs);
+        this.timer.set(-(mins * 60 + secs));
+        this.timer.reset();
+    }
+
+    int getWheelValue(int id) {
+        AbstractWheel wheel = (AbstractWheel)findViewById(id);
+        return wheel.getCurrentItem();
     }
 
 }
