@@ -1,6 +1,8 @@
 package ru.gelin.android.countdown;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /**
  *  A timer to count down and up.
@@ -21,17 +23,29 @@ public class Timer {
     long zeroTime;
 
     /** Current offset in Stop state, in seconds */
-    long offset;
+    int offset;
 
     /** Initial offset, where to reset, in seconds */
-    long initOffset;
+    int initOffset;
+
+    /** Preferences to save the state */
+    final SharedPreferences prefs;
+
+    static final String STATE_PREF = "timer_state";
+    static final String ZERO_TIME_PREF = "timer_zero_time";
+    static final String OFFSET_PREF = "timer_offset";
+    static final String INIT_OFFSET_PREF = "timer_init_offset";
 
     /**
      *  Constructs the timer for the application from the context.
      *  Loads from SharedPreferences.
      */
     Timer(Context context) {
-        //TODO
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        this.state = State.valueOf(this.prefs.getString(STATE_PREF, State.STOP.toString()));
+        this.zeroTime = this.prefs.getLong(ZERO_TIME_PREF, System.currentTimeMillis());
+        this.offset = this.prefs.getInt(OFFSET_PREF, 0);
+        this.initOffset = this.prefs.getInt(INIT_OFFSET_PREF, 0);
     }
 
     /**
@@ -39,7 +53,12 @@ public class Timer {
      *  Saves to SharedPreferences.
      */
     void save() {
-        //TODO
+        SharedPreferences.Editor editor = this.prefs.edit();
+        editor.putString(STATE_PREF, String.valueOf(this.state));
+        editor.putLong(ZERO_TIME_PREF, this.zeroTime);
+        editor.putInt(OFFSET_PREF, this.offset);
+        editor.putInt(INIT_OFFSET_PREF, this.initOffset);
+        editor.commit();
     }
 
     /**
@@ -69,16 +88,16 @@ public class Timer {
         this.state = State.STOP;
     }
 
-    private long findOffset() {
+    private int findOffset() {
         long now = System.currentTimeMillis();
-        return (now - this.zeroTime) / 1000;
+        return (int)(now - this.zeroTime) / 1000;
     }
 
     /**
      *  Sets the initial offset of the timer.
      *  @param offset   initial time offset in seconds
      */
-    public synchronized void set(long offset) {
+    public synchronized void set(int offset) {
         this.initOffset = offset;
     }
 
@@ -100,14 +119,14 @@ public class Timer {
      *  If the timer is stopped the offset doesn't change (only by #set() or #reset()).
      *  If the timer is run, the offset changes according to the current time.
      */
-    public synchronized long getOffset() {
+    public synchronized int getOffset() {
         switch (this.state) {
             case STOP:
                 return this.offset;
             case RUN:
                 return findOffset();
         }
-        return 0l;
+        return 0;
     }
 
     /**

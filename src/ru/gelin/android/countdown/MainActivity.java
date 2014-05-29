@@ -33,10 +33,6 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         View content = findViewById(android.R.id.content);
         content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         content.setOnSystemUiVisibilityChangeListener(this);
-
-        //TODO remove test
-        this.timer.set(-30);
-        this.timer.reset();
     }
 
     void initWheel(int id, int min, int max) {
@@ -52,7 +48,18 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     @Override
     protected void onResume() {
         super.onResume();
+        if (this.timer.isRunning()) {
+            start();
+        } else {
+            stop();
+        }
         updateWheels();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.timer.save();
     }
 
     @Override
@@ -62,6 +69,10 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     }
 
     public void start(View btn) {
+        start();
+    }
+
+    void start() {
         enableWheel(R.id.ten_mins, false);
         enableWheel(R.id.mins, false);
         enableWheel(R.id.ten_secs, false);
@@ -74,8 +85,14 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     }
 
     public void stop(View btn) {
+        stop();
+    }
+
+    void stop() {
         this.timer.stop();
-        this.updater.stop();
+        if (this.updater != null) {
+            this.updater.stop();
+        }
         enableWheel(R.id.ten_mins, true);
         enableWheel(R.id.mins, true);
         enableWheel(R.id.ten_secs, true);
@@ -85,6 +102,10 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     }
 
     public void reset(View btn) {
+        reset();
+    }
+
+    void reset() {
         this.timer.reset();
         updateWheels();
     }
