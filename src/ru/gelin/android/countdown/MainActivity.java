@@ -9,12 +9,14 @@ import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelChangedListener;
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 
+
 public class MainActivity extends Activity implements View.OnSystemUiVisibilityChangeListener, OnWheelChangedListener {
 
     static final int MAX_OFFSET = 99 * 60 + 59;
 
     Timer timer;
     UpdateTask updater;
+    boolean redWheels = false;
 
     /**
      * Called when the activity is first created.
@@ -38,7 +40,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     void initWheel(int id, int min, int max) {
         AbstractWheel wheel = (AbstractWheel)findViewById(id);
         NumericWheelAdapter adapter = new NumericWheelAdapter(this, min, max);
-        adapter.setItemResource(R.layout.wheel_text_centered);
+        adapter.setItemResource(R.layout.wheel_text);
         adapter.setItemTextResource(R.id.text);
         wheel.setViewAdapter(adapter);
         wheel.setCyclic(true);
@@ -93,6 +95,11 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         if (this.updater != null) {
             this.updater.stop();
         }
+        changeWheelLayout(R.id.ten_mins, R.layout.wheel_text);
+        changeWheelLayout(R.id.mins, R.layout.wheel_text);
+        changeWheelLayout(R.id.ten_secs, R.layout.wheel_text);
+        changeWheelLayout(R.id.secs, R.layout.wheel_text);
+        this.redWheels = false;
         enableWheel(R.id.ten_mins, true);
         enableWheel(R.id.mins, true);
         enableWheel(R.id.ten_secs, true);
@@ -116,12 +123,23 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     }
 
     void updateWheels() {
-        long doffset = Math.abs(this.timer.getOffset());
+        int origOffset = this.timer.getOffset();
+
+        if (origOffset > 0 ^ this.redWheels) {
+            this.redWheels = origOffset > 0;
+            int layout = this.redWheels ? R.layout.wheel_text_red : R.layout.wheel_text;
+            changeWheelLayout(R.id.ten_mins, layout);
+            changeWheelLayout(R.id.mins, layout);
+            changeWheelLayout(R.id.ten_secs, layout);
+            changeWheelLayout(R.id.secs, layout);
+        }
+
+        int absOffset = Math.abs(origOffset);
         int offset;
-        if (doffset > MAX_OFFSET) {
+        if (absOffset > MAX_OFFSET) {
             offset = MAX_OFFSET;
         } else {
-            offset = (int)doffset;
+            offset = absOffset;
         }
         int mins = offset / 60;
         int secs = offset % 60;
@@ -131,6 +149,13 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         updateWheel(R.id.mins, mins % 10);
         updateWheel(R.id.ten_secs, secs / 10);
         updateWheel(R.id.secs, secs % 10);
+    }
+
+    void changeWheelLayout(int id, int layout) {
+        AbstractWheel wheel = (AbstractWheel)findViewById(id);
+        NumericWheelAdapter adapter = (NumericWheelAdapter)wheel.getViewAdapter();
+        adapter.setItemResource(layout);
+        wheel.setViewAdapter(adapter);  //to force view redraw
     }
 
     void updateWheel(int id, int value) {
