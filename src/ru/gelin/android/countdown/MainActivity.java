@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         } else {
             stop();
         }
-        updateWheels();
+        new UpdateTask(true).execute();
     }
 
     @Override
@@ -157,16 +157,34 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     class UpdateTask extends AsyncTask<Void, Void, Void> {
 
         boolean run = true;
+        boolean once = false;
 
         public void stop() {
             this.run = false;
         }
 
+        public UpdateTask() {
+            this(false);
+        }
+
+        public UpdateTask(boolean once) {
+            this.once = once;
+        }
+
         @Override
         protected Void doInBackground(Void... voids) {
-            while(this.run) {
+            if (this.once) {
                 try {
-                    publishProgress();
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    //nothing to do
+                }
+                publishProgress();
+                return null;
+            }
+            while(this.run) {
+                publishProgress();
+                try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     //nothing to do
