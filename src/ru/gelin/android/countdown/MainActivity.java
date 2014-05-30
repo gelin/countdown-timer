@@ -17,6 +17,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     Timer timer;
     UpdateTask updater;
     boolean redWheels = false;
+    AbstractWheel wheels[] = new AbstractWheel[4];
 
     /**
      * Called when the activity is first created.
@@ -27,18 +28,21 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         this.timer = new Timer(this);
         setContentView(R.layout.main);
 
-        initWheel(R.id.ten_mins, 0, 9);
-        initWheel(R.id.mins, 0, 9);
-        initWheel(R.id.ten_secs, 0, 5);
-        initWheel(R.id.secs, 0, 9);
+        this.wheels[0] = (AbstractWheel) findViewById(R.id.ten_mins);
+        this.wheels[1] = (AbstractWheel) findViewById(R.id.mins);
+        this.wheels[2] = (AbstractWheel) findViewById(R.id.ten_secs);
+        this.wheels[3] = (AbstractWheel) findViewById(R.id.secs);
+        initWheel(this.wheels[0], 0, 9);
+        initWheel(this.wheels[1], 0, 9);
+        initWheel(this.wheels[2], 0, 5);
+        initWheel(this.wheels[3], 0, 9);
 
         View content = findViewById(android.R.id.content);
         content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         content.setOnSystemUiVisibilityChangeListener(this);
     }
 
-    void initWheel(int id, int min, int max) {
-        AbstractWheel wheel = (AbstractWheel)findViewById(id);
+    void initWheel(AbstractWheel wheel, int min, int max) {
         NumericWheelAdapter adapter = new NumericWheelAdapter(this, min, max);
         adapter.setItemResource(R.layout.wheel_text);
         adapter.setItemTextResource(R.id.text);
@@ -75,10 +79,9 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     }
 
     void start() {
-        enableWheel(R.id.ten_mins, false);
-        enableWheel(R.id.mins, false);
-        enableWheel(R.id.ten_secs, false);
-        enableWheel(R.id.secs, false);
+        for (AbstractWheel wheel : this.wheels) {
+            wheel.setEnabled(false);
+        }
         this.timer.start();
         this.updater = new UpdateTask();
         this.updater.execute();
@@ -95,15 +98,11 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         if (this.updater != null) {
             this.updater.stop();
         }
-        changeWheelLayout(R.id.ten_mins, R.layout.wheel_text);
-        changeWheelLayout(R.id.mins, R.layout.wheel_text);
-        changeWheelLayout(R.id.ten_secs, R.layout.wheel_text);
-        changeWheelLayout(R.id.secs, R.layout.wheel_text);
+        for (AbstractWheel wheel : this.wheels) {
+            changeWheelLayout(wheel, R.layout.wheel_text);
+            wheel.setEnabled(true);
+        }
         this.redWheels = false;
-        enableWheel(R.id.ten_mins, true);
-        enableWheel(R.id.mins, true);
-        enableWheel(R.id.ten_secs, true);
-        enableWheel(R.id.secs, true);
         findViewById(R.id.stop_btn).setVisibility(View.GONE);
         findViewById(R.id.start_btn).setVisibility(View.VISIBLE);
     }
@@ -117,21 +116,15 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         updateWheels();
     }
 
-    void enableWheel(int id, boolean enabled) {
-        AbstractWheel wheel = (AbstractWheel)findViewById(id);
-        wheel.setEnabled(enabled);
-    }
-
     void updateWheels() {
         int origOffset = this.timer.getOffset();
 
         if (origOffset > 0 ^ this.redWheels) {
             this.redWheels = origOffset > 0;
             int layout = this.redWheels ? R.layout.wheel_text_red : R.layout.wheel_text;
-            changeWheelLayout(R.id.ten_mins, layout);
-            changeWheelLayout(R.id.mins, layout);
-            changeWheelLayout(R.id.ten_secs, layout);
-            changeWheelLayout(R.id.secs, layout);
+            for (AbstractWheel wheel : this.wheels) {
+                changeWheelLayout(wheel, layout);
+            }
         }
 
         int absOffset = Math.abs(origOffset);
@@ -145,21 +138,19 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         int secs = offset % 60;
 
         Log.d(Tag.TAG, String.format("%d mins, %d secs", mins, secs));
-        updateWheel(R.id.ten_mins, mins / 10);
-        updateWheel(R.id.mins, mins % 10);
-        updateWheel(R.id.ten_secs, secs / 10);
-        updateWheel(R.id.secs, secs % 10);
+        updateWheel(this.wheels[0], mins / 10);
+        updateWheel(this.wheels[1], mins % 10);
+        updateWheel(this.wheels[2], secs / 10);
+        updateWheel(this.wheels[3], secs % 10);
     }
 
-    void changeWheelLayout(int id, int layout) {
-        AbstractWheel wheel = (AbstractWheel)findViewById(id);
+    void changeWheelLayout(AbstractWheel wheel, int layout) {
         NumericWheelAdapter adapter = (NumericWheelAdapter)wheel.getViewAdapter();
         adapter.setItemResource(layout);
         wheel.setViewAdapter(adapter);  //to force view redraw
     }
 
-    void updateWheel(int id, int value) {
-        AbstractWheel wheel = (AbstractWheel)findViewById(id);
+    void updateWheel(AbstractWheel wheel, int value) {
         wheel.setCurrentItem(value, true);
     }
 
