@@ -184,8 +184,8 @@ public abstract class AbstractWheel extends View {
                     onScrollTouchedUp(); // if scrolling IS performed, whe should use onFinished instead
             }
 
-            public void onScroll(int distance) {
-                doScroll(distance);
+            public void onScroll(int distance, boolean notify) {
+                doScroll(distance, notify);
 
                 int dimension = getBaseDimension();
                 if (mScrollingOffset > dimension) {
@@ -328,23 +328,35 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
-     * Scroll the spinnerwheel
+     * Scroll the spinnerwheel, notifying change listener.
      *
      * @param itemsToScroll items to scroll
      * @param time          scrolling duration
      */
     public void scroll(int itemsToScroll, int time) {
+        scroll(itemsToScroll, time, true);
+    }
+
+    /**
+     * Scroll the spinnerwheel
+     *
+     * @param itemsToScroll items to scroll
+     * @param time          scrolling duration
+     * @param notify        notify change listener
+     */
+    public void scroll(int itemsToScroll, int time, boolean notify) {
         int distance = itemsToScroll * getItemDimension() - mScrollingOffset;
         onScrollTouched(); // we have to emulate touch when scrolling spinnerwheel programmatically to light up stuff
-        mScroller.scroll(distance, time);
+        mScroller.scroll(distance, time, notify);
     }
 
     /**
      * Scrolls the spinnerwheel
      *
      * @param delta the scrolling value
+     * @param notify notify change listeners
      */
-    private void doScroll(int delta) {
+    private void doScroll(int delta, boolean notify) {
         mScrollingOffset += delta;
 
         int itemDimension = getItemDimension();
@@ -388,7 +400,7 @@ public abstract class AbstractWheel extends View {
 
         int offset = mScrollingOffset;
         if (pos != mCurrentItemIdx) {
-            setCurrentItem(pos, false);
+            setCurrentItem(pos, false, notify);
         } else {
             invalidate();
         }
@@ -558,8 +570,9 @@ public abstract class AbstractWheel extends View {
      *
      * @param index    the item index
      * @param animated the animation flag
+     * @param notify   notify change listeners
      */
-    public void setCurrentItem(int index, boolean animated) {
+    public void setCurrentItem(int index, boolean animated, boolean notify) {
         if (mViewAdapter == null || mViewAdapter.getItemsCount() == 0) {
             return; // throw?
         }
@@ -584,15 +597,27 @@ public abstract class AbstractWheel extends View {
                         itemsToScroll = itemsToScroll < 0 ? scroll : -scroll;
                     }
                 }
-                scroll(itemsToScroll, 0);
+                scroll(itemsToScroll, 0, notify);
             } else {
                 mScrollingOffset = 0;
                 final int old = mCurrentItemIdx;
                 mCurrentItemIdx = index;
-                notifyChangingListeners(old, mCurrentItemIdx);
+                if (notify) {
+                    notifyChangingListeners(old, mCurrentItemIdx);
+                }
                 invalidate();
             }
         }
+    }
+
+    /**
+     * Sets the current item notifying the change listeners.
+     *
+     * @param index    the item index
+     * @param animated the animation flag
+     */
+    public void setCurrentItem(int index, boolean animated) {
+        setCurrentItem(index, animated, true);
     }
 
     /**

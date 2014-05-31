@@ -79,9 +79,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     }
 
     void start() {
-        for (AbstractWheel wheel : this.wheels) {
-            wheel.setEnabled(false);
-        }
+        disableWheels();
         this.timer.start();
         this.updater = new UpdateTask();
         this.updater.execute();
@@ -100,8 +98,8 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         }
         for (AbstractWheel wheel : this.wheels) {
             changeWheelLayout(wheel, R.layout.wheel_text);
-            wheel.setEnabled(true);
         }
+        enableWheels();
         this.redWheels = false;
         findViewById(R.id.stop_btn).setVisibility(View.GONE);
         findViewById(R.id.start_btn).setVisibility(View.VISIBLE);
@@ -116,7 +114,21 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         updateWheels();
     }
 
+    void enableWheels() {
+        for (AbstractWheel wheel : this.wheels) {
+            wheel.setEnabled(true);
+        }
+    }
+
+    void disableWheels() {
+        for (AbstractWheel wheel : this.wheels) {
+            wheel.setEnabled(false);
+        }
+    }
+
     void updateWheels() {
+//        Log.d(Tag.TAG, "updating");
+
         int origOffset = this.timer.getOffset();
 
         if (origOffset > 0 ^ this.redWheels) {
@@ -137,11 +149,13 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         int mins = offset / 60;
         int secs = offset % 60;
 
-        Log.d(Tag.TAG, String.format("%d mins, %d secs", mins, secs));
+//        Log.d(Tag.TAG, String.format("%d mins, %d secs", mins, secs));
         updateWheel(this.wheels[0], mins / 10);
         updateWheel(this.wheels[1], mins % 10);
         updateWheel(this.wheels[2], secs / 10);
         updateWheel(this.wheels[3], secs % 10);
+
+//        Log.d(Tag.TAG, "updated");
     }
 
     void changeWheelLayout(AbstractWheel wheel, int layout) {
@@ -151,7 +165,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     }
 
     void updateWheel(AbstractWheel wheel, int value) {
-        wheel.setCurrentItem(value, true);
+        wheel.setCurrentItem(value, true, false);
     }
 
     class UpdateTask extends AsyncTask<Void, Void, Void> {
@@ -202,18 +216,17 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 
     @Override
     public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+        if (wheel.isEnabled() == false) {
+            return;
+        }
         if (this.timer.isRunning()) {
             return;
         }
-        int mins = getWheelValue(R.id.ten_mins) * 10 + getWheelValue(R.id.mins);
-        int secs = getWheelValue(R.id.ten_secs) * 10 + getWheelValue(R.id.secs);
+//        Log.d(Tag.TAG, "changed: " + newValue);
+        int mins = this.wheels[0].getCurrentItem() * 10 + this.wheels[1].getCurrentItem();
+        int secs = this.wheels[2].getCurrentItem() * 10 + this.wheels[3].getCurrentItem();
         this.timer.set(-(mins * 60 + secs));
         this.timer.reset();
-    }
-
-    int getWheelValue(int id) {
-        AbstractWheel wheel = (AbstractWheel)findViewById(id);
-        return wheel.getCurrentItem();
     }
 
 }

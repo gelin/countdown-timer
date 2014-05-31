@@ -44,8 +44,9 @@ public abstract class WheelScroller {
         /**
          * Scrolling callback called when scrolling is performed.
          * @param distance the distance to scroll
+         * @param notify notify change listener
          */
-        void onScroll(int distance);
+        void onScroll(int distance, boolean notify);
 
         /**
          * This callback is invoked when scroller has been touched
@@ -79,6 +80,9 @@ public abstract class WheelScroller {
     /** Minimum delta for scrolling */
     public static final int MIN_DELTA_FOR_SCROLLING = 1;
 
+    /** Flag to handler */
+    private static final String NOTIFY = "notify";
+
     // Listener
     private ScrollingListener listener;
     
@@ -108,7 +112,7 @@ public abstract class WheelScroller {
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 lastScrollPosition = 0;
                 scrollerFling(lastScrollPosition, (int) velocityX, (int) velocityY);
-                setNextMessage(MESSAGE_SCROLL);
+                setNextMessage(MESSAGE_SCROLL, true);
                 return true;
             }
 
@@ -131,17 +135,27 @@ public abstract class WheelScroller {
         scroller.forceFinished(true);
         scroller = new Scroller(context, interpolator);
     }
-    
+
     /**
-     * Scroll the spinnerwheel
+     * Scroll the spinnerwheel notifying change listener
      * @param distance the scrolling distance
      * @param time the scrolling duration
      */
     public void scroll(int distance, int time) {
+        scroll(distance, time, true);
+    }
+
+    /**
+     * Scroll the spinnerwheel
+     * @param distance the scrolling distance
+     * @param time the scrolling duration
+     * @param notify notify change listener
+     */
+    public void scroll(int distance, int time, boolean notify) {
         scroller.forceFinished(true);
         lastScrollPosition = 0;
         scrollerStartScroll(distance, time != 0 ? time : SCROLLING_DURATION);
-        setNextMessage(MESSAGE_SCROLL);
+        setNextMessage(MESSAGE_SCROLL, notify);
         startScrolling();
     }
    
@@ -178,7 +192,7 @@ public abstract class WheelScroller {
                 int distance = (int)(getMotionEventPosition(event) - lastTouchedPosition);
                 if (distance != 0) {
                     startScrolling();
-                    listener.onScroll(distance);
+                    listener.onScroll(distance, true);
                     lastTouchedPosition = getMotionEventPosition(event);
                 }
                 break;
@@ -200,10 +214,14 @@ public abstract class WheelScroller {
      * Set next message to queue. Clears queue before.
      * 
      * @param message the message to set
+     * @param notify notify change listeners
      */
-    private void setNextMessage(int message) {
+    private void setNextMessage(int message, boolean notify) {
         clearMessages();
-        animationHandler.sendEmptyMessage(message);
+        Message msg = Message.obtain();
+        msg.what = message;
+        msg.getData().putBoolean(NOTIFY, notify);
+        animationHandler.sendMessage(msg);
     }
 
     /**
@@ -222,7 +240,7 @@ public abstract class WheelScroller {
             int delta = lastScrollPosition - currPosition;
             lastScrollPosition = currPosition;
             if (delta != 0) {
-                listener.onScroll(delta);
+                listener.onScroll(delta, msg.getData().getBoolean(NOTIFY, true));
             }
             
             // scrolling is not finished when it comes to final Y
@@ -232,7 +250,9 @@ public abstract class WheelScroller {
                 scroller.forceFinished(true);
             }
             if (!scroller.isFinished()) {
-                animationHandler.sendEmptyMessage(msg.what);
+                Message newMsg = Message.obtain();
+                newMsg.copyFrom(msg);
+                animationHandler.sendMessage(newMsg);
             } else if (msg.what == MESSAGE_SCROLL) {
                 justify();
             } else {
@@ -246,7 +266,7 @@ public abstract class WheelScroller {
      */
     private void justify() {
         listener.onJustify();
-        setNextMessage(MESSAGE_JUSTIFY);
+        setNextMessage(MESSAGE_JUSTIFY, true);
     }
 
     /**
