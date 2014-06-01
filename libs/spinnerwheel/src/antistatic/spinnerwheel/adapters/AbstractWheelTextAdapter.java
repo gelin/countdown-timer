@@ -26,6 +26,7 @@ package antistatic.spinnerwheel.adapters;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,20 +51,24 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
     public static final int LABEL_COLOR = 0xFF700070;
     
     /** Default text size */
-    public static final int DEFAULT_TEXT_SIZE = 24;
+    public static final float DEFAULT_TEXT_SIZE = 24f;
+
+    /** Default text size unit */
+    public static final int DEFAULT_TEXT_SIZE_UNIT = TypedValue.COMPLEX_UNIT_SP;
 
     /// Custom text typeface
     private Typeface textTypeface;
     
     // Text settings
     private int textColor = DEFAULT_TEXT_COLOR;
-    private int textSize = DEFAULT_TEXT_SIZE;
+    private float textSize = DEFAULT_TEXT_SIZE;
+    private int textSizeUnit = DEFAULT_TEXT_SIZE_UNIT;
     
     // Current context
     protected Context context;
     // Layout inflater
     protected LayoutInflater inflater;
-    
+
     // Items resources
     protected int itemResourceId;
     protected int itemTextResourceId;
@@ -131,7 +136,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
      * Gets text size
      * @return the text size
      */
-    public int getTextSize() {
+    public float getTextSize() {
         return textSize;
     }
     
@@ -139,8 +144,26 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
      * Sets text size
      * @param textSize the text size to set
      */
-    public void setTextSize(int textSize) {
+    public void setTextSize(float textSize) {
         this.textSize = textSize;
+    }
+
+    /**
+     * Gets the text size unit.
+     * @return the text size unit.
+     * @see android.util.TypedValue
+     */
+    public int getTextSizeUnit() {
+        return textSizeUnit;
+    }
+
+    /**
+     * Sets the text size unit.
+     * @param unit the text size unit to set
+     * @see android.util.TypedValue
+     */
+    public void setTextSizeUnit(int unit) {
+        this.textSizeUnit = unit;
     }
     
     /**
@@ -238,7 +261,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
         if (itemResourceId == TEXT_VIEW_ITEM_RESOURCE) {
             view.setTextColor(textColor);
             view.setGravity(Gravity.CENTER);
-            view.setTextSize(textSize);
+            view.setTextSize(textSizeUnit, textSize);
             view.setLines(1);
         }
         if (textTypeface != null) {

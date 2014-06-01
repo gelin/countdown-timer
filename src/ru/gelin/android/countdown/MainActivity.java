@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelChangedListener;
@@ -15,14 +16,14 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 
     static final int MAX_OFFSET = 99 * 60 + 59;
 
-    static final float WHEEL_SIZE_RATIO = 0.5f;
+    static final float WHEEL_SIZE_RATIO = 0.6f;
     static final Typeface WHEEL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
     static final int WHEEL_COLOR = 0xffeeeeee;
     static final int WHEEL_COLOR_RED = 0xffee0000;
 
     Timer timer;
     UpdateTask updater;
-    int wheelTextSize;
+    float wheelTextSize;
     boolean redWheels = false;
     AbstractWheel wheels[] = new AbstractWheel[4];
 
@@ -35,26 +36,28 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         this.timer = new Timer(this);
         setContentView(R.layout.main);
 
-        this.wheelTextSize = (int) (getWindowManager().getDefaultDisplay().getHeight() * WHEEL_SIZE_RATIO);
+        View content = findViewById(android.R.id.content);
+        content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        content.setOnSystemUiVisibilityChangeListener(this);
+
+        this.wheelTextSize = getWindowManager().getDefaultDisplay().getHeight() * WHEEL_SIZE_RATIO;
 //        Log.d(Tag.TAG, "widthxheight: " + getWindowManager().getDefaultDisplay().getWidth() + "x" + getWindowManager().getDefaultDisplay().getHeight());
 
         this.wheels[0] = (AbstractWheel) findViewById(R.id.ten_mins);
         this.wheels[1] = (AbstractWheel) findViewById(R.id.mins);
         this.wheels[2] = (AbstractWheel) findViewById(R.id.ten_secs);
         this.wheels[3] = (AbstractWheel) findViewById(R.id.secs);
+
         initWheel(this.wheels[0], 0, 9);
         initWheel(this.wheels[1], 0, 9);
         initWheel(this.wheels[2], 0, 5);
         initWheel(this.wheels[3], 0, 9);
-
-        View content = findViewById(android.R.id.content);
-        content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-        content.setOnSystemUiVisibilityChangeListener(this);
     }
 
     void initWheel(AbstractWheel wheel, int min, int max) {
         NumericWheelAdapter adapter = new NumericWheelAdapter(this, min, max);
-//        Log.d(Tag.TAG, "text size: " + this.wheelTextSize);
+        Log.d(Tag.TAG, "text size: " + this.wheelTextSize);
+        adapter.setTextSizeUnit(TypedValue.COMPLEX_UNIT_PX);
         adapter.setTextSize(this.wheelTextSize);
         adapter.setTextColor(0xffffffff);
         adapter.setTextTypeface(WHEEL_TYPEFACE);
