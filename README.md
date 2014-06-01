@@ -12,8 +12,14 @@ How to use
 * Start/Stop the timer
 * Rewind back to the initial value
 
-Displays overtime in red.
+Screenshots
+-----------
 
+!(https://bytebucket.org/gelin/android-countdown/raw/981220515a3d508d21d67bb9906642083f117593/misc/screenshots/timer.png "The timer")
+
+!(https://bytebucket.org/gelin/android-countdown/raw/981220515a3d508d21d67bb9906642083f117593/misc/screenshots/scrolling.png "Animated scrolling")
+
+!(https://bytebucket.org/gelin/android-countdown/raw/981220515a3d508d21d67bb9906642083f117593/misc/screenshots/overtime.png "Displays overtime in red")
 
 License
 -------
