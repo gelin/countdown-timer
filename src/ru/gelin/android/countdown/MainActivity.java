@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.View;
 import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelChangedListener;
@@ -16,7 +17,6 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 
     static final int MAX_OFFSET = 99 * 60 + 59;
 
-    static final float WHEEL_SIZE_RATIO = 0.6f;
     static final Typeface WHEEL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
     static final int WHEEL_COLOR = 0xffeeeeee;
     static final int WHEEL_COLOR_RED = 0xffee0000;
@@ -40,7 +40,11 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         content.setOnSystemUiVisibilityChangeListener(this);
 
-        this.wheelTextSize = getWindowManager().getDefaultDisplay().getHeight() * WHEEL_SIZE_RATIO;
+        Display display = getWindowManager().getDefaultDisplay();
+        TypedValue ratio = new TypedValue();
+        getResources().getValue(R.dimen.wheel_text_size_ratio, ratio, true);
+        this.wheelTextSize = display.getHeight() * ratio.getFloat();
+        Log.d(Tag.TAG, String.format("text size: %f (ratio: %f)", this.wheelTextSize, ratio.getFloat()));
 //        Log.d(Tag.TAG, "widthxheight: " + getWindowManager().getDefaultDisplay().getWidth() + "x" + getWindowManager().getDefaultDisplay().getHeight());
 
         this.wheels[0] = (AbstractWheel) findViewById(R.id.ten_mins);
@@ -56,7 +60,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 
     void initWheel(AbstractWheel wheel, int min, int max) {
         NumericWheelAdapter adapter = new NumericWheelAdapter(this, min, max);
-        Log.d(Tag.TAG, "text size: " + this.wheelTextSize);
+//        Log.d(Tag.TAG, "text size: " + this.wheelTextSize);
         adapter.setTextSizeUnit(TypedValue.COMPLEX_UNIT_PX);
         adapter.setTextSize(this.wheelTextSize);
         adapter.setTextColor(0xffffffff);
