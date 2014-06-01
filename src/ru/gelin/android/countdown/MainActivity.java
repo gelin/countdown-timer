@@ -1,9 +1,9 @@
 package ru.gelin.android.countdown;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelChangedListener;
@@ -14,8 +14,14 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 
     static final int MAX_OFFSET = 99 * 60 + 59;
 
+    static final float WHEEL_SIZE_RATIO = 0.45f;
+    static final Typeface WHEEL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
+    static final int WHEEL_COLOR = 0xffeeeeee;
+    static final int WHEEL_COLOR_RED = 0xffee0000;
+
     Timer timer;
     UpdateTask updater;
+    int wheelTextSize;
     boolean redWheels = false;
     AbstractWheel wheels[] = new AbstractWheel[4];
 
@@ -27,6 +33,8 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         super.onCreate(savedInstanceState);
         this.timer = new Timer(this);
         setContentView(R.layout.main);
+
+        this.wheelTextSize = (int) (getWindowManager().getDefaultDisplay().getHeight() * WHEEL_SIZE_RATIO);
 
         this.wheels[0] = (AbstractWheel) findViewById(R.id.ten_mins);
         this.wheels[1] = (AbstractWheel) findViewById(R.id.mins);
@@ -44,8 +52,10 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 
     void initWheel(AbstractWheel wheel, int min, int max) {
         NumericWheelAdapter adapter = new NumericWheelAdapter(this, min, max);
-        adapter.setItemResource(R.layout.wheel_text);
-        adapter.setItemTextResource(R.id.text);
+//        Log.d(Tag.TAG, "text size: " + this.wheelTextSize);
+        adapter.setTextSize(this.wheelTextSize);
+        adapter.setTextColor(0xffffffff);
+        adapter.setTextTypeface(WHEEL_TYPEFACE);
         wheel.setViewAdapter(adapter);
         wheel.setCyclic(true);
         wheel.addChangingListener(this);
@@ -97,7 +107,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
             this.updater.stop();
         }
         for (AbstractWheel wheel : this.wheels) {
-            changeWheelLayout(wheel, R.layout.wheel_text);
+            changeWheelColor(wheel, WHEEL_COLOR);
         }
         enableWheels();
         this.redWheels = false;
@@ -133,9 +143,9 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 
         if (origOffset > 0 ^ this.redWheels) {
             this.redWheels = origOffset > 0;
-            int layout = this.redWheels ? R.layout.wheel_text_red : R.layout.wheel_text;
+            int color = this.redWheels ? WHEEL_COLOR_RED : WHEEL_COLOR;
             for (AbstractWheel wheel : this.wheels) {
-                changeWheelLayout(wheel, layout);
+                changeWheelColor(wheel, color);
             }
         }
 
@@ -158,9 +168,9 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 //        Log.d(Tag.TAG, "updated");
     }
 
-    void changeWheelLayout(AbstractWheel wheel, int layout) {
+    void changeWheelColor(AbstractWheel wheel, int color) {
         NumericWheelAdapter adapter = (NumericWheelAdapter)wheel.getViewAdapter();
-        adapter.setItemResource(layout);
+        adapter.setTextColor(color);
         wheel.setViewAdapter(adapter);  //to force view redraw
     }
 
