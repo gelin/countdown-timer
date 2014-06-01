@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelChangedListener;
@@ -14,7 +15,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 
     static final int MAX_OFFSET = 99 * 60 + 59;
 
-    static final float WHEEL_SIZE_RATIO = 0.45f;
+    static final float WHEEL_SIZE_RATIO = 0.5f;
     static final Typeface WHEEL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
     static final int WHEEL_COLOR = 0xffeeeeee;
     static final int WHEEL_COLOR_RED = 0xffee0000;
@@ -35,6 +36,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         setContentView(R.layout.main);
 
         this.wheelTextSize = (int) (getWindowManager().getDefaultDisplay().getHeight() * WHEEL_SIZE_RATIO);
+//        Log.d(Tag.TAG, "widthxheight: " + getWindowManager().getDefaultDisplay().getWidth() + "x" + getWindowManager().getDefaultDisplay().getHeight());
 
         this.wheels[0] = (AbstractWheel) findViewById(R.id.ten_mins);
         this.wheels[1] = (AbstractWheel) findViewById(R.id.mins);
@@ -58,6 +60,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         adapter.setTextTypeface(WHEEL_TYPEFACE);
         wheel.setViewAdapter(adapter);
         wheel.setCyclic(true);
+        wheel.setVisibleItems(1);
         wheel.addChangingListener(this);
     }
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@android:id/content"
-              android:orientation="horizontal"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:keepScreenOn="true"
@@ -11,13 +10,19 @@
 
     <antistatic.spinnerwheel.WheelVerticalView
             android:id="@+id/ten_mins"
-            style="@style/TimerWheel"/>
+            style="@style/TimerWheel"
+            android:layout_toLeftOf="@+id/mins"
+            />
     <antistatic.spinnerwheel.WheelVerticalView
             android:id="@+id/mins"
-            style="@style/TimerWheel"/>
+            style="@style/TimerWheel"
+            android:layout_toLeftOf="@+id/buttons"
+            />
 
-    <RelativeLayout android:layout_width="wrap_content"
-                    android:layout_height="fill_parent">
+    <RelativeLayout android:id="@+id/buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_centerInParent="true">
         <Button android:id="@+id/start_btn"
                 style="@style/TimerButton.Top"
                 android:drawableBottom="@android:drawable/ic_media_play"
@@ -40,10 +45,14 @@
 
     <antistatic.spinnerwheel.WheelVerticalView
             android:id="@+id/ten_secs"
-            style="@style/TimerWheel"/>
+            style="@style/TimerWheel"
+            android:layout_toRightOf="@+id/buttons"
+            />
     <antistatic.spinnerwheel.WheelVerticalView
             android:id="@+id/secs"
-            style="@style/TimerWheel"/>
+            style="@style/TimerWheel"
+            android:layout_toRightOf="@+id/ten_secs"
+            />
 
-</LinearLayout>
+</RelativeLayout>
 
