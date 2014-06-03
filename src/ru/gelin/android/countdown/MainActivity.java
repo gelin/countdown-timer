@@ -24,7 +24,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     Timer timer;
     UpdateTask updater;
     float wheelTextSize;
-    boolean redWheels = false;
+    int wheelsColor = WHEEL_COLOR;
     AbstractWheel wheels[] = new AbstractWheel[4];
 
     /**
@@ -63,7 +63,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 //        Log.d(Tag.TAG, "text size: " + this.wheelTextSize);
         adapter.setTextSizeUnit(TypedValue.COMPLEX_UNIT_PX);
         adapter.setTextSize(this.wheelTextSize);
-        adapter.setTextColor(0xffffffff);
+        adapter.setTextColor(WHEEL_COLOR);
         adapter.setTextTypeface(WHEEL_TYPEFACE);
         wheel.setViewAdapter(adapter);
         wheel.setCyclic(true);
@@ -116,11 +116,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         if (this.updater != null) {
             this.updater.stop();
         }
-        for (AbstractWheel wheel : this.wheels) {
-            changeWheelColor(wheel, WHEEL_COLOR);
-        }
         enableWheels();
-        this.redWheels = false;
         findViewById(R.id.stop_btn).setVisibility(View.GONE);
         findViewById(R.id.start_btn).setVisibility(View.VISIBLE);
     }
@@ -150,14 +146,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 //        Log.d(Tag.TAG, "updating");
 
         int origOffset = this.timer.getOffset();
-
-        if (origOffset > 0 ^ this.redWheels) {
-            this.redWheels = origOffset > 0;
-            int color = this.redWheels ? WHEEL_COLOR_RED : WHEEL_COLOR;
-            for (AbstractWheel wheel : this.wheels) {
-                changeWheelColor(wheel, color);
-            }
-        }
+        changeWheelsColor(origOffset > 0 ? WHEEL_COLOR_RED : WHEEL_COLOR);
 
         int absOffset = Math.abs(origOffset);
         int offset;
@@ -178,21 +167,31 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 //        Log.d(Tag.TAG, "updated");
     }
 
+    void updateWheel(AbstractWheel wheel, int value) {
+        wheel.setCurrentItem(value, true, false);
+    }
+
+    void changeWheelsColor(int color) {
+        if (this.wheelsColor == color) {
+            return;
+        }
+        for (AbstractWheel wheel : this.wheels) {
+            changeWheelColor(wheel, color);
+        }
+        this.wheelsColor = color;
+    }
+
     void changeWheelColor(AbstractWheel wheel, int color) {
         NumericWheelAdapter adapter = (NumericWheelAdapter)wheel.getViewAdapter();
         adapter.setTextColor(color);
         wheel.setViewAdapter(adapter);  //to force view redraw
     }
 
-    void updateWheel(AbstractWheel wheel, int value) {
-        wheel.setCurrentItem(value, true, false);
-    }
-
     class UpdateTask extends AsyncTask<Void, Void, Void> {
 
         boolean run = true;
-        boolean once = false;
 
+        boolean once = false;
         public void stop() {
             this.run = false;
         }
@@ -235,8 +234,8 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     }
 
     @Override
-    public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-        if (wheel.isEnabled() == false) {
+    public void onChanged(AbstractWheel changedWheel, int oldValue, int newValue) {
+        if (changedWheel.isEnabled() == false) {
             return;
         }
         if (this.timer.isRunning()) {
@@ -247,6 +246,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
         int secs = this.wheels[2].getCurrentItem() * 10 + this.wheels[3].getCurrentItem();
         this.timer.set(-(mins * 60 + secs));
         this.timer.reset();
+        changeWheelsColor(WHEEL_COLOR);
     }
 
 }
