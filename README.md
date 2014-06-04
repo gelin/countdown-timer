@@ -12,6 +12,12 @@ How to use
 * Start/Stop the timer
 * Rewind back to the initial value
 
+Downloads
+---------
+
+* [Google Play](https://play.google.com/store/apps/details?id=ru.gelin.android.countdown)
+* [Bitbucket](https://bitbucket.org/gelin/android-countdown/downloads)
+
 Demo
 ----
 
