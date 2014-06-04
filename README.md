@@ -12,6 +12,11 @@ How to use
 * Start/Stop the timer
 * Rewind back to the initial value
 
+Demo
+----
+
+[![YouTube video](http://img.youtube.com/vi/1yT6ikMAB-0/0.jpg)](http://youtu.be/1yT6ikMAB-0)
+
 Screenshots
 -----------
 
