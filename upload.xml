@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="android-countdown" default="upload-all">
+
+    <property file="local.properties"/>
+    <xmlproperty file="AndroidManifest.xml"/>
+
+    <target name="upload-all" depends="upload-debug, upload-release"/>
+
+    <target name="upload-debug" description="Upload ${ant.project.name}-debug.apk">
+
+	    <copy file="bin/${ant.project.name}-debug.apk"
+	          todir="/home/gelin/Dropbox/android@gelin"/>
+    
+    </target>
+    
+    <target name="upload-release" description="Upload ${ant.project.name}.apk">
+
+        <copy file="bin/${ant.project.name}-release.apk"
+              tofile="bin/${ant.project.name}.apk"/>
+
+	    <copy file="bin/${ant.project.name}-release.apk"
+	          tofile="bin/${ant.project.name}-${manifest(android:versionName)}-${manifest(android:versionCode)}.apk"/>
+
+	    <copy file="bin/${ant.project.name}.apk"
+	          todir="/home/gelin/Dropbox/android@gelin"/>
+    
+    </target>
+
+</project>

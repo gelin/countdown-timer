@@ -3,3 +3,4 @@ syntax: glob
 gen/*
 local.properties
 out/*
+bin/*
