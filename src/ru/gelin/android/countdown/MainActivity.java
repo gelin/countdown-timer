@@ -86,6 +86,9 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
     protected void onPause() {
         super.onPause();
         this.timer.save();
+        if (this.updater != null) {
+            this.updater.stop();
+        }
     }
 
     @Override
