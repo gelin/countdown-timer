@@ -3,7 +3,7 @@ Countdown Timer
 
 Simple countdown timer for Android.
 
-Uses [android-spinnerwheel](https://github.com/ai212983/android-spinnerwheel) component to display animated counter wheels.
+Uses [android-spinnerwheel](https://github.com/ai212983/android-spinnerwheel) component to display animated counter-wheels.
 
 How to use
 ----------
@@ -16,21 +16,21 @@ Downloads
 ---------
 
 * [Google Play](https://play.google.com/store/apps/details?id=ru.gelin.android.countdown)
-* [Bitbucket](https://bitbucket.org/gelin/android-countdown/downloads)
+* [GitHub](https://github.com/gelin/countdown-timer/releases)
 
 Demo
 ----
 
-[![YouTube video](http://img.youtube.com/vi/1yT6ikMAB-0/0.jpg)](http://youtu.be/1yT6ikMAB-0)
+[![YouTube video](https://img.youtube.com/vi/1yT6ikMAB-0/0.jpg)](https://youtu.be/1yT6ikMAB-0)
 
 Screenshots
 -----------
 
-![screenshot](https://bytebucket.org/gelin/android-countdown/raw/981220515a3d508d21d67bb9906642083f117593/misc/screenshots/timer.png "The timer")
+![screenshot](misc/screenshots/timer.png "The timer")
 
-![screenshot](https://bytebucket.org/gelin/android-countdown/raw/981220515a3d508d21d67bb9906642083f117593/misc/screenshots/scrolling.png "Animated scrolling")
+![screenshot](misc/screenshots/scrolling.png "Animated scrolling")
 
-![screenshot](https://bytebucket.org/gelin/android-countdown/raw/981220515a3d508d21d67bb9906642083f117593/misc/screenshots/overtime.png "Displays overtime in red")
+![screenshot](misc/screenshots/overtime.png "Displays overtime in red")
 
 License
 -------

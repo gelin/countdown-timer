@@ -1,0 +1,7 @@
+.idea/*
+*.iml
+gen/*
+local.properties
+out/*
+bin/*
+upload.credentials
