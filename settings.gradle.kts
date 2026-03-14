@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Countdown Timer"
 include(":app")
+include(":libs:spinnerwheel")
