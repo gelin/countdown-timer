@@ -238,7 +238,7 @@ public class MainActivity extends Activity implements View.OnSystemUiVisibilityC
 
     @Override
     public void onChanged(AbstractWheel changedWheel, int oldValue, int newValue) {
-        if (changedWheel.isEnabled() == false) {
+        if (!changedWheel.isEnabled()) {
             return;
         }
         if (this.timer.isRunning()) {
