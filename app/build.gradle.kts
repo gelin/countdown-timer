@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "ru.gelin.android.countdown"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "ru.gelin.android.countdown"
         minSdk = 14
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 3
         versionName = "0.3"
     }
