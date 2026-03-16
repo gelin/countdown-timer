@@ -2,7 +2,6 @@ package ru.gelin.android.countdown
 
 import android.app.Activity
 import android.graphics.Typeface
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -10,11 +9,12 @@ import android.view.View
 import antistatic.spinnerwheel.AbstractWheel
 import antistatic.spinnerwheel.OnWheelChangedListener
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter
+import kotlinx.coroutines.*
 
 class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWheelChangedListener {
 
     private lateinit var timer: Timer
-    private var updater: UpdateTask? = null
+    private var updaterJob: Job? = null
     private var wheelTextSize: Float = 0f
     private var wheelsColor: Int = WHEEL_COLOR
     private val wheels = arrayOfNulls<AbstractWheel>(4)
@@ -28,7 +28,7 @@ class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWhee
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.timer = Timer(this)
+        timer = Timer(this)
         setContentView(R.layout.main)
 
         val content = findViewById<View>(android.R.id.content)
@@ -38,18 +38,18 @@ class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWhee
         val display = windowManager.defaultDisplay
         val ratio = TypedValue()
         resources.getValue(R.dimen.wheel_text_size_ratio, ratio, true)
-        this.wheelTextSize = display.height * ratio.float
+        wheelTextSize = display.height * ratio.float
         Log.d(TAG, "text size: ${this.wheelTextSize} (ratio: ${ratio.float})")
 
-        this.wheels[0] = findViewById<View>(R.id.ten_mins) as AbstractWheel
-        this.wheels[1] = findViewById<View>(R.id.mins) as AbstractWheel
-        this.wheels[2] = findViewById<View>(R.id.ten_secs) as AbstractWheel
-        this.wheels[3] = findViewById<View>(R.id.secs) as AbstractWheel
+        wheels[0] = findViewById<View>(R.id.ten_mins) as AbstractWheel
+        wheels[1] = findViewById<View>(R.id.mins) as AbstractWheel
+        wheels[2] = findViewById<View>(R.id.ten_secs) as AbstractWheel
+        wheels[3] = findViewById<View>(R.id.secs) as AbstractWheel
 
-        initWheel(this.wheels[0], 0, 9)
-        initWheel(this.wheels[1], 0, 9)
-        initWheel(this.wheels[2], 0, 5)
-        initWheel(this.wheels[3], 0, 9)
+        initWheel(wheels[0], 0, 9)
+        initWheel(wheels[1], 0, 9)
+        initWheel(wheels[2], 0, 5)
+        initWheel(wheels[3], 0, 9)
     }
 
     private fun initWheel(wheel: AbstractWheel?, min: Int, max: Int) {
@@ -67,18 +67,21 @@ class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWhee
 
     override fun onResume() {
         super.onResume()
-        if (this.timer.isRunning()) {
+        if (timer.isRunning()) {
             start()
         } else {
             stop()
         }
-        UpdateTask(true).execute()
+        updaterJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(500)
+            updateWheels()
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        this.timer.save()
-        this.updater?.stop()
+        timer.save()
+        updaterJob?.cancel()
     }
 
     override fun onSystemUiVisibilityChange(i: Int) {
@@ -92,9 +95,14 @@ class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWhee
 
     private fun start() {
         disableWheels()
-        this.timer.start()
-        this.updater = UpdateTask()
-        this.updater?.execute()
+        timer.start()
+        updaterJob?.cancel()
+        updaterJob = CoroutineScope(Dispatchers.Main).launch {
+            while (isActive) {
+                updateWheels()
+                delay(1000)
+            }
+        }
         findViewById<View>(R.id.start_btn).visibility = View.GONE
         findViewById<View>(R.id.stop_btn).visibility = View.VISIBLE
     }
@@ -104,8 +112,8 @@ class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWhee
     }
 
     private fun stop() {
-        this.timer.stop()
-        this.updater?.stop()
+        timer.stop()
+        updaterJob?.cancel()
         enableWheels()
         findViewById<View>(R.id.stop_btn).visibility = View.GONE
         findViewById<View>(R.id.start_btn).visibility = View.VISIBLE
@@ -116,24 +124,24 @@ class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWhee
     }
 
     private fun reset() {
-        this.timer.reset()
+        timer.reset()
         updateWheels()
     }
 
     private fun enableWheels() {
-        for (wheel in this.wheels) {
+        for (wheel in wheels) {
             wheel?.isEnabled = true
         }
     }
 
     private fun disableWheels() {
-        for (wheel in this.wheels) {
+        for (wheel in wheels) {
             wheel?.isEnabled = false
         }
     }
 
     private fun updateWheels() {
-        val origOffset = this.timer.currentOffset
+        val origOffset = timer.currentOffset
         changeWheelsColor(if (origOffset > 0) WHEEL_COLOR_RED else WHEEL_COLOR)
 
         val absOffset = Math.abs(origOffset)
@@ -141,10 +149,10 @@ class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWhee
         val mins = offset / 60
         val secs = offset % 60
 
-        updateWheel(this.wheels[0], mins / 10)
-        updateWheel(this.wheels[1], mins % 10)
-        updateWheel(this.wheels[2], secs / 10)
-        updateWheel(this.wheels[3], secs % 10)
+        updateWheel(wheels[0], mins / 10)
+        updateWheel(wheels[1], mins % 10)
+        updateWheel(wheels[2], secs / 10)
+        updateWheel(wheels[3], secs % 10)
     }
 
     private fun updateWheel(wheel: AbstractWheel?, value: Int) {
@@ -152,13 +160,13 @@ class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWhee
     }
 
     private fun changeWheelsColor(color: Int) {
-        if (this.wheelsColor == color) {
+        if (wheelsColor == color) {
             return
         }
-        for (wheel in this.wheels) {
+        for (wheel in wheels) {
             changeWheelColor(wheel, color)
         }
-        this.wheelsColor = color
+        wheelsColor = color
     }
 
     private fun changeWheelColor(wheel: AbstractWheel?, color: Int) {
@@ -168,51 +176,17 @@ class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWhee
         wheel.viewAdapter = adapter // to force view redraw
     }
 
-    inner class UpdateTask(private val once: Boolean = false) : AsyncTask<Void, Void, Void>() {
-
-        private var run = true
-
-        fun stop() {
-            this.run = false
-        }
-
-        override fun doInBackground(vararg voids: Void?): Void? {
-            if (this.once) {
-                try {
-                    Thread.sleep(500)
-                } catch (e: InterruptedException) {
-                    // nothing to do
-                }
-                publishProgress()
-                return null
-            }
-            while (this.run) {
-                publishProgress()
-                try {
-                    Thread.sleep(1000)
-                } catch (e: InterruptedException) {
-                    // nothing to do
-                }
-            }
-            return null
-        }
-
-        override fun onProgressUpdate(vararg values: Void?) {
-            updateWheels()
-        }
-    }
-
     override fun onChanged(changedWheel: AbstractWheel, oldValue: Int, newValue: Int) {
         if (!changedWheel.isEnabled) {
             return
         }
-        if (this.timer.isRunning()) {
+        if (timer.isRunning()) {
             return
         }
-        val mins = (this.wheels[0]?.currentItem ?: 0) * 10 + (this.wheels[1]?.currentItem ?: 0)
-        val secs = (this.wheels[2]?.currentItem ?: 0) * 10 + (this.wheels[3]?.currentItem ?: 0)
-        this.timer.set(-(mins * 60 + secs))
-        this.timer.reset()
+        val mins = (wheels[0]?.currentItem ?: 0) * 10 + (wheels[1]?.currentItem ?: 0)
+        val secs = (wheels[2]?.currentItem ?: 0) * 10 + (wheels[3]?.currentItem ?: 0)
+        timer.set(-(mins * 60 + secs))
+        timer.reset()
         changeWheelsColor(WHEEL_COLOR)
     }
 }
