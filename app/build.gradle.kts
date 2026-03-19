@@ -31,6 +31,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.appcompat)
+    implementation(libs.material)
     implementation(project(":libs:spinnerwheel"))
     implementation(libs.kotlinx.coroutines.android)
 }

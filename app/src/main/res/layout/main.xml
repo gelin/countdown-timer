@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@android:id/content"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
@@ -25,20 +26,20 @@
                     android:layout_centerInParent="true">
         <Button android:id="@+id/start_btn"
                 style="@style/TimerButton.Top"
-                android:drawableBottom="@android:drawable/ic_media_play"
+                android:text="▶"
                 android:onClick="start"
                 />
         <Button android:id="@+id/stop_btn"
                 style="@style/TimerButton.Top"
                 android:visibility="gone"
-                android:drawableBottom="@android:drawable/ic_media_pause"
+                android:text="⏸"
                 android:onClick="stop"
                 />
         <View android:id="@+id/separator"
               style="@style/Separator"/>
         <Button android:id="@+id/reset_btn"
                 style="@style/TimerButton.Bottom"
-                android:drawableTop="@android:drawable/ic_media_rew"
+                android:text="⏪"
                 android:onClick="reset"
                 />
     </RelativeLayout>

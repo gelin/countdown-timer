@@ -1,6 +1,7 @@
 package ru.gelin.android.countdown
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +12,7 @@ import antistatic.spinnerwheel.OnWheelChangedListener
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter
 import kotlinx.coroutines.*
 
-class MainActivity : Activity(), View.OnSystemUiVisibilityChangeListener, OnWheelChangedListener {
+class MainActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListener, OnWheelChangedListener {
 
     private lateinit var timer: Timer
     private var updaterJob: Job? = null
