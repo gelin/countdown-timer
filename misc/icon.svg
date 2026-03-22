@@ -2,23 +2,23 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="48"
-   height="48"
+   width="512"
+   height="512"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    sodipodi:docname="icon.svg"
    inkscape:export-filename="/home/gelin/work/bitbucket/android-countdown/res/drawable-mdpi/ic_launcher.png"
    inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
+   inkscape:export-ydpi="90"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs4">
     <linearGradient
@@ -45,7 +45,7 @@
        x2="13.197221"
        y2="0.10319433"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.98119124,0,0,0.75993642,-0.89303423,1010.1281)" />
+       gradientTransform="matrix(7.8495165,0,0,6.079481,-7.1442616,1009.3778)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3786"
@@ -127,18 +127,21 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="13.184595"
-     inkscape:cx="11.585296"
-     inkscape:cy="21.281303"
+     inkscape:zoom="3.2961488"
+     inkscape:cx="243.92103"
+     inkscape:cy="258.63517"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      width="48px"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
-     inkscape:window-x="65"
-     inkscape:window-y="1104"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="3840"
+     inkscape:window-height="2104"
+     inkscape:window-x="0"
+     inkscape:window-y="56"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -147,7 +150,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -156,55 +158,57 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1004.3625)">
-    <rect
-       style="fill:url(#linearGradient3792);fill-opacity:1;stroke:none"
-       id="rect3784"
-       width="23.739826"
-       height="36.254433"
-       x="0"
-       y="1010.2353" />
-    <rect
-       y="1010.2353"
-       x="24.260174"
-       height="36.254433"
-       width="23.739826"
-       id="rect3796"
-       style="fill:url(#linearGradient3798);fill-opacity:1;stroke:none"
-       clip-path="url(#clipPath3874)" />
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
-       x="1.0300694"
-       y="1042.718"
-       id="text3004"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3006"
-         x="1.0300694"
-         y="1042.718">4</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text3008"
-       y="1026.1167"
-       x="25.348837"
-       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
-       xml:space="preserve"
-       clip-path="url(#clipPath3868)"><tspan
-         y="1026.1167"
-         x="25.348837"
-         id="tspan3010"
-         sodipodi:role="line">2</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
-       x="25.505087"
-       y="1058.8855"
-       id="text3012"
-       sodipodi:linespacing="125%"
-       clip-path="url(#clipPath3862)"><tspan
-         sodipodi:role="line"
-         id="tspan3014"
-         x="25.505087"
-         y="1058.8855">3</tspan></text>
+    <g
+       id="g233"
+       transform="translate(64.000329,105.10973)">
+      <rect
+         style="fill:url(#linearGradient3792);fill-opacity:1;stroke:none;stroke-width:7.99999"
+         id="rect3784"
+         width="189.91829"
+         height="290.03497"
+         x="0"
+         y="1010.2353" />
+      <rect
+         y="1010.2353"
+         x="24.260174"
+         height="36.254433"
+         width="23.739826"
+         id="rect3796"
+         style="fill:url(#linearGradient3798);fill-opacity:1;stroke:none"
+         clip-path="url(#clipPath3874)"
+         transform="matrix(7.9999863,0,0,7.9999863,0,-7071.6332)" />
+      <g
+         aria-label="4"
+         id="text3004"
+         style="line-height:0%;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';letter-spacing:0px;word-spacing:0px;fill:#ffffff"
+         transform="matrix(7.9999863,0,0,7.9999863,0,-7071.6332)">
+        <path
+           d="m 23.110069,1036.238 h -4.16 v 6.48 h -3.4 v -6.48 H 1.8700694 v -3 l 13.4399996,-19.24 h 3.64 v 19.08 h 4.16 z m -7.56,-12.16 q 0,-2.08 0.08,-3.52 0.08,-1.48 0.12,-2.8 h -0.16 q -0.32,0.76 -0.8,1.64 -0.48,0.88 -0.92,1.48 l -8.5599996,12.2 H 15.550069 Z"
+           style="font-size:40px;line-height:1.25"
+           id="path188" />
+      </g>
+      <g
+         aria-label="2"
+         id="text3008"
+         clip-path="url(#clipPath3868)"
+         style="line-height:0%;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';letter-spacing:0px;word-spacing:0px;fill:#ffffff"
+         transform="matrix(7.9999863,0,0,7.9999863,0,-7071.6332)">
+        <path
+           d="m 46.148837,1026.1167 h -18.88 v -2.92 l 7.48,-7.56 q 2.16,-2.16 3.64,-3.84 1.48,-1.68 2.24,-3.28 0.76,-1.64 0.76,-3.56 0,-2.36 -1.4,-3.56 -1.4,-1.24 -3.64,-1.24 -2.08,0 -3.68,0.72 -1.56,0.72 -3.2,2 l -1.88,-2.36 q 1.68,-1.4 3.84,-2.36 2.2,-1 4.92,-1 4,0 6.32,2.04 2.32,2 2.32,5.56 0,2.24 -0.92,4.2 -0.92,1.96 -2.56,3.88 -1.64,1.88 -3.84,4.04 l -5.96,5.88 v 0.16 h 14.44 z"
+           style="font-size:40px;line-height:1.25"
+           id="path191" />
+      </g>
+      <g
+         aria-label="3"
+         id="text3012"
+         clip-path="url(#clipPath3862)"
+         style="line-height:0%;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';letter-spacing:0px;word-spacing:0px;fill:#ffffff"
+         transform="matrix(7.9999863,0,0,7.9999863,0,-7071.6332)">
+        <path
+           d="m 45.225087,1037.0055 q 0,2.88 -1.6,4.6 -1.6,1.68 -4.32,2.24 v 0.16 q 3.44,0.4 5.12,2.16 1.68,1.76 1.68,4.6 0,2.48 -1.16,4.44 -1.16,1.92 -3.6,3 -2.4,1.08 -6.2,1.08 -2.24,0 -4.16,-0.36 -1.92,-0.32 -3.68,-1.2 v -3.28 q 1.8,0.88 3.88,1.4 2.08,0.48 4,0.48 3.84,0 5.52,-1.48 1.72,-1.52 1.72,-4.16 0,-2.68 -2.12,-3.84 -2.08,-1.2 -5.88,-1.2 h -2.76 v -3 h 2.8 q 3.52,0 5.32,-1.48 1.84,-1.48 1.84,-3.92 0,-2.08 -1.4,-3.2 -1.4,-1.16 -3.8,-1.16 -2.32,0 -3.96,0.68 -1.64,0.68 -3.24,1.72 l -1.76,-2.4 q 1.52,-1.2 3.76,-2.08 2.28,-0.88 5.16,-0.88 4.48,0 6.64,2 2.2,2 2.2,5.08 z"
+           style="font-size:40px;line-height:1.25"
+           id="path194" />
+      </g>
+    </g>
   </g>
 </svg>
