@@ -7,3 +7,5 @@ out/*
 bin/*
 upload.credentials
 libs/spinnerwheel/build/*
+*.jks
+*.p12
