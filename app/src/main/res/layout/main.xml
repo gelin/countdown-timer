@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@android:id/content"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:keepScreenOn="true"
+              android:gravity="center"
+              android:background="#000"
+        >
+
+    <antistatic.spinnerwheel.WheelVerticalView
+            android:id="@+id/ten_mins"
+            style="@style/TimerWheel"
+            android:layout_toLeftOf="@+id/mins"
+            />
+    <antistatic.spinnerwheel.WheelVerticalView
+            android:id="@+id/mins"
+            style="@style/TimerWheel"
+            android:layout_toLeftOf="@+id/buttons"
+            />
+
+    <RelativeLayout android:id="@+id/buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_centerInParent="true">
+        <Button android:id="@+id/start_btn"
+                style="@style/TimerButton.Top"
+                android:text="▶"
+                android:onClick="start"
+                />
+        <Button android:id="@+id/stop_btn"
+                style="@style/TimerButton.Top"
+                android:visibility="gone"
+                android:text="⏸"
+                android:onClick="stop"
+                />
+        <View android:id="@+id/separator"
+              style="@style/Separator"/>
+        <Button android:id="@+id/reset_btn"
+                style="@style/TimerButton.Bottom"
+                android:text="⏪"
+                android:onClick="reset"
+                />
+    </RelativeLayout>
+
+    <antistatic.spinnerwheel.WheelVerticalView
+            android:id="@+id/ten_secs"
+            style="@style/TimerWheel"
+            android:layout_toRightOf="@+id/buttons"
+            />
+    <antistatic.spinnerwheel.WheelVerticalView
+            android:id="@+id/secs"
+            style="@style/TimerWheel"
+            android:layout_toRightOf="@+id/ten_secs"
+            />
+
+</RelativeLayout>
+
