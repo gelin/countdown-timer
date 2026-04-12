@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
+
     steps:
     - uses: actions/checkout@v5
     - name: set up JDK 21
@@ -23,21 +25,44 @@ jobs:
     - name: Decode Keystore
       run: |
         echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 --decode > app/release.p12
-    - name: Build Release APK
-      run: ./gradlew assembleRelease
+
+    - name: Build Release APK and Bundle
+      run: ./gradlew assembleRelease bundleRelease
       env:
         RELEASE_STORE_FILE: release.p12
         RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
         RELEASE_KEY_ALIAS: countdown-timer
         RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+
     - name: Upload Release APK
       uses: actions/upload-artifact@v5
       with:
-        name: countdown-timer-release
+        name: countdown-timer-release-apk
         path: app/build/outputs/apk/release/*.apk
+    - name: Upload Release Bundle
+      uses: actions/upload-artifact@v5
+      with:
+        name: countdown-timer-release-bundle
+        path: app/build/outputs/bundle/release/*.aab
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        files: app/build/outputs/apk/release/*.apk
+        files: |
+          app/build/outputs/apk/release/*.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Authenticate to Google Play
+      id: auth
+      uses: 'google-github-actions/auth@v3'
+      with:
+        service_account: google-play-publisher@api-4897194272756593439-103872.iam.gserviceaccount.com
+        workload_identity_provider: projects/164878529656/locations/global/workloadIdentityPools/github/providers/my-repo
+    - name: Publish to Google Play (Internal)
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJson: ${{ steps.auth.outputs.credentials_file_path }}
+        packageName: ru.gelin.android.countdown
+        releaseFiles: app/build/outputs/bundle/release/*.aab
+        track: internal
+        status: completed

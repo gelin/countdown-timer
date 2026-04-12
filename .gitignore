@@ -9,3 +9,5 @@ upload.credentials
 libs/spinnerwheel/build/*
 *.jks
 *.p12
+# Ignore generated credentials from google-github-actions/auth
+gha-creds-*.json
